@@ -1,0 +1,25 @@
+plugins {
+    id 'java'
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src']
+        }
+    }
+}
+
+// configurando os plugins usados
+java  {
+}
+
+// para ficar igual ao netbeans (build --> dist): raytracer.jar colocado em java/dist
+layout.buildDirectory = file('dist')
+tasks.named('jar') { destinationDirectory = layout.buildDirectory }
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'raytracer.Main'
+    }
+}

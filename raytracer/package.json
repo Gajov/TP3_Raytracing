@@ -1,0 +1,20 @@
+{
+  "name": "raytracer",
+  "version": "1.0.0",
+  "description": "A simple raytracer",
+  "main": "corrigir.js",
+  "type": "module",
+  "scripts": {
+    "start": "chmod +x corrigir.js && ./corrigir.js"
+  },
+  "author": "Flavio Coutinho <fegemo@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "chalk": "^5.6.2",
+    "hjson": "^3.2.2",
+    "open": "^11.0.0",
+    "portfinder": "^1.0.38",
+    "progress": "^2.0.3",
+    "serve-handler": "^6.1.7"
+  }
+}

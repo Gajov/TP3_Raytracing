@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Resultados do ray tracer</title>
+    <link rel="shortcut icon" href="favicon.png" type="image/icon">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Satisfy&display=swap">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <style>
+        body {
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        h1 {
+            font-family: "Satisfy", cursive;
+        }
+        
+        h1.navbar-brand {
+            font-size: 36px;
+            color: #333;
+        }
+        
+        h1.navbar-brand strong {
+            color: hotpink;
+        }
+        
+        #alunos {
+            color: cornflowerblue;
+        }
+        
+        .card {
+            position: relative;
+            min-width: 300px;
+            box-sizing: border-box;
+        }
+        
+        .card .diff {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+        }
+        
+        .card:hover .diff {
+            opacity: 1;
+        }
+        
+        .card:nth-of-type(2) {
+            cursor: crosshair;
+        }
+        
+        .tooltip-icon {
+            fill: #6c757d;
+            cursor: help;
+            margin-left: 0.25em;
+        }
+        
+        .items {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-light bg-light">
+            <h1 class="navbar-brand mb-0 h1">
+                <strong>Ray tracer</strong> <small>de</small> <small id="alunos"></small></h1>
+            <span class="navbar-text">
+                <strong>Linguagem:</strong> <span id="linguagem"></span>
+            </span>
+        </nav>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col">
+                    <strong>Primeira parte:</strong><br>
+                    <div class="items">
+                        <div class="custom-control custom-switch custom-control-inline">
+                            <input type="checkbox" class="custom-control-input" disabled id="esfera">
+                            <label class="custom-control-label" for="esfera">Esfera</label>
+                            <svg data-toggle="tooltip" data-html="true"
+                                title="<span class='text-info'>[Obrigatório]</span> Colisão com esfera"
+                                class="tooltip-icon" viewBox="0 0 14 16" version="1.1" width="16" aria-hidden="true">
+                                <path fill-rule="evenodd"
+                                    d="M6.3 5.69a.942.942 0 01-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 01-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z">
+                                </path>
+                            </svg>
+                        </div>
+                        <div class="custom-control custom-switch custom-control-inline">
+                            <input type="checkbox" class="custom-control-input" disabled id="plano">
+                            <label class="custom-control-label" for="plano">Plano</label>
+                            <svg data-toggle="tooltip" data-html="true" title="<span class='text-info'>[Extra]</span> Colisão com plano"
+                                class="tooltip-icon" viewBox="0 0 14 16" version="1.1" width="16" aria-hidden="true">
+                                <path fill-rule="evenodd"
+                                    d="M6.3 5.69a.942.942 0 01-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 01-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z">
+                                </path>
+                            </svg>
+                        </div>
+                        <div class="custom-control custom-switch custom-control-inline">
+                            <input type="checkbox" class="custom-control-input" disabled id="circulo">
+                            <label class="custom-control-label" for="circulo">Círculo</label>
+                            <svg data-toggle="tooltip" data-html="true" title="<span class='text-info'>[Extra]</span> Colisão com círculo"
+                                class="tooltip-icon" viewBox="0 0 14 16" version="1.1" width="16" aria-hidden="true">
+                                <path fill-rule="evenodd"
+                                    d="M6.3 5.69a.942.942 0 01-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 01-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z">
+                                </path>
+                            </svg>
+                        </div>
+                        <div class="custom-control custom-switch custom-control-inline">
+                            <input type="checkbox" class="custom-control-input" disabled id="triangulo">
+                            <label class="custom-control-label" for="triangulo">Triângulo</label>
+                            <svg data-toggle="tooltip" data-html="true" title="<span class='text-info'>[Extra]</span> Colisão com triângulo"
+                                class="tooltip-icon" viewBox="0 0 14 16" version="1.1" width="16" aria-hidden="true">
+                                <path fill-rule="evenodd"
+                                    d="M6.3 5.69a.942.942 0 01-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 01-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z">
+                                </path>
+                            </svg>
+                        </div>
+                        <div class="custom-control custom-switch custom-control-inline">
+                            <input type="checkbox" class="custom-control-input" disabled id="cilindro">
+                            <label class="custom-control-label" for="cilindro">Cilindro</label>
+                            <svg data-toggle="tooltip" data-html="true" title="<span class='text-info'>[Extra]</span> Colisão com cilindro"
+                                class="tooltip-icon" viewBox="0 0 14 16" version="1.1" width="16" aria-hidden="true">
+                                <path fill-rule="evenodd"
+                                    d="M6.3 5.69a.942.942 0 01-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 01-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z">
+                                </path>
+                            </svg>
+                        </div>
+                        <div class="custom-control custom-switch custom-control-inline">
+                            <input type="checkbox" class="custom-control-input" disabled id="modeloObj">
+                            <label class="custom-control-label" for="modeloObj">Modelo .obj</label>
+                            <svg data-toggle="tooltip" data-html="true" title="<span class='text-info'>[Extra]</span> Colisão com modelos .obj"
+                                class="tooltip-icon" viewBox="0 0 14 16" version="1.1" width="16" aria-hidden="true">
+                                <path fill-rule="evenodd"
+                                    d="M6.3 5.69a.942.942 0 01-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 01-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z">
+                                </path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <strong>Segunda parte:</strong>
+                    <div class="items">
+                        <div class="custom-control custom-switch custom-control-inline">
+                            <input type="checkbox" class="custom-control-input" disabled id="phong">
+                            <label class="custom-control-label" for="phong">Phong</label>
+                            <svg data-toggle="tooltip" data-html="true"
+                                title="<span class='text-info'>[Obrigatório]</span> Implementação do modelo de Phong<br>(ray tracer simples)"
+                                class="tooltip-icon" viewBox="0 0 14 16" version="1.1" width="16" aria-hidden="true">
+                                <path fill-rule="evenodd"
+                                    d="M6.3 5.69a.942.942 0 01-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 01-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z">
+                                </path>
+                            </svg>
+                        </div>
+                        <div class="custom-control custom-switch custom-control-inline">
+                            <input type="checkbox" class="custom-control-input" disabled id="reflexao">
+                            <label class="custom-control-label" for="reflexao">Reflexão</label>
+                            <svg data-toggle="tooltip" data-html="true"
+                                title="<span class='text-info'>[Extra]</span> Raio de reflexão para objetos reflexivos<br>(ray tracer recursivo)"
+                                class="tooltip-icon" viewBox="0 0 14 16" version="1.1" width="16" aria-hidden="true">
+                                <path fill-rule="evenodd"
+                                    d="M6.3 5.69a.942.942 0 01-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 01-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z">
+                                </path>
+                            </svg>
+                        </div>
+                        <div class="custom-control custom-switch custom-control-inline">
+                            <input type="checkbox" class="custom-control-input" disabled id="refracao">
+                            <label class="custom-control-label" for="refracao">Refração</label>
+                            <svg data-toggle="tooltip" data-html="true"
+                                title="<span class='text-info'>[Extra]</span> Raio de refração para objetos transparentes<br>(ray tracer recursivo)"
+                                class="tooltip-icon" viewBox="0 0 14 16" version="1.1" width="16" aria-hidden="true">
+                                <path fill-rule="evenodd"
+                                    d="M6.3 5.69a.942.942 0 01-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 01-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z">
+                                </path>
+                            </svg>
+                        </div>
+                        <div class="custom-control custom-switch custom-control-inline">
+                            <input type="checkbox" class="custom-control-input" disabled id="distribuido">
+                            <label class="custom-control-label" for="distribuido">Distribuído</label>
+                            <svg data-toggle="tooltip" data-html="true"
+                                title="<span class='text-info'>[Extra]</span> Múltiplos raios por pixel<br>(ray tracer distribuído)"
+                                class="tooltip-icon" viewBox="0 0 14 16" version="1.1" width="16" aria-hidden="true">
+                                <path fill-rule="evenodd"
+                                    d="M6.3 5.69a.942.942 0 01-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 01-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z">
+                                </path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <main class="container-fluid">
+        <div class="row">
+            <div class="card-deck col-xl">
+                <div class="card">
+                    <img src="cena-simples.png" class="card-img-top">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <code>cena-simples.txt</code>
+                            <svg data-toggle="tooltip"
+                                title="Apenas uma esfera (componentes ambiente e difusa)"
+                                class="tooltip-icon" viewBox="0 0 14 16" version="1.1" width="16" aria-hidden="true">
+                                <path fill-rule="evenodd"
+                                    d="M6.3 5.69a.942.942 0 01-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 01-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z">
+                                </path>
+                            </svg>
+                        </h5>
+                    </div>
+                </div>
+                <div class="card">
+                    <img src="cena-simples-objetivo.png" class="card-img-top">
+                    <div class="card-body">
+                        <h5 class="card-title">Objetivo <small class="diff-pixels"></small></h5>
+                    </div>
+                </div>
+            </div>
+            <div class="card-deck col-xl">
+                <div class="card">
+                    <img src="cena-primitivas.png" class="card-img-top">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <code>cena-primitivas.txt</code>
+                            <svg data-toggle="tooltip" title="3x esfera, plano, círculo, triângulo e cilindro (bom para testar sombras no plano)" class="tooltip-icon" viewBox="0 0 14 16" version="1.1" width="16"
+                                aria-hidden="true">
+                                <path fill-rule="evenodd"
+                                    d="M6.3 5.69a.942.942 0 01-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 01-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z">
+                                </path>
+                            </svg>
+                        </h5>
+                    </div>
+                </div>
+                <div class="card">
+                    <img src="cena-primitivas-objetivo.png" class="card-img-top">
+                    <div class="card-body">
+                        <h5 class="card-title">Objetivo <small class="diff-pixels"></small></h5>
+                    </div>
+                </div>
+            </div>
+            <div class="card-deck col-xl">
+                <div class="card">
+                    <img src="cena-2-fontes-luz.png" class="card-img-top">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <code>cena-2-fontes-luz.txt</code>
+                            <svg data-toggle="tooltip" title="Esfera com material especular" class="tooltip-icon" viewBox="0 0 14 16" version="1.1" width="16"
+                                aria-hidden="true">
+                                <path fill-rule="evenodd"
+                                    d="M6.3 5.69a.942.942 0 01-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 01-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z">
+                                </path>
+                            </svg>
+                        </h5>
+                    </div>
+                </div>
+                <div class="card">
+                    <img src="cena-2-fontes-luz-objetivo.png" class="card-img-top">
+                    <div class="card-body">
+                        <h5 class="card-title">Objetivo <small class="diff-pixels"></small></h5>
+                    </div>
+                </div>
+            </div>
+            <div class="card-deck col-xl">
+                <div class="card">
+                    <img src="cena-arvore.png" class="card-img-top">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <code>cena-arvore.txt</code>
+                            <svg data-toggle="tooltip" title="Esfera, cilindros, planos, triângulos (bom para testar sombras no chão)" class="tooltip-icon" viewBox="0 0 14 16" version="1.1" width="16"
+                                aria-hidden="true">
+                                <path fill-rule="evenodd"
+                                    d="M6.3 5.69a.942.942 0 01-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 01-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z">
+                                </path>
+                            </svg>
+                        </h5>
+                    </div>
+                </div>
+                <div class="card">
+                    <img src="cena-arvore-objetivo.png" class="card-img-top">
+                    <div class="card-body">
+                        <h5 class="card-title">Objetivo <small class="diff-pixels"></small></h5>
+                    </div>
+                </div>
+            </div>
+            <div class="card-deck col-xl">
+                <div class="card">
+                    <img src="cena-empilhadas.png" class="card-img-top">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <code>cena-empilhadas.txt</code>
+                            <svg data-toggle="tooltip" title="Apenas esferas, material reflexivo (há sombras)" class="tooltip-icon" viewBox="0 0 14 16" version="1.1" width="16"
+                                aria-hidden="true">
+                                <path fill-rule="evenodd"
+                                    d="M6.3 5.69a.942.942 0 01-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 01-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z">
+                                </path>
+                            </svg>
+                        </h5>
+                    </div>
+                </div>
+                <div class="card">
+                    <img src="cena-empilhadas-objetivo.png" class="card-img-top">
+                    <div class="card-body">
+                        <h5 class="card-title">Objetivo <small class="diff-pixels"></small></h5>
+                    </div>
+                </div>
+            </div>
+            <div class="card-deck col-xl">
+                <div class="card">
+                    <img src="cena-whitted.png" class="card-img-top">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <code>cena-whitted.txt</code>
+                            <svg data-toggle="tooltip" title="Apenas esferas, materiais reflexivos e refratários (sombra no chão)" class="tooltip-icon" viewBox="0 0 14 16" version="1.1" width="16"
+                                aria-hidden="true">
+                                <path fill-rule="evenodd"
+                                    d="M6.3 5.69a.942.942 0 01-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 01-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z">
+                                </path>
+                            </svg>
+                        </h5>
+                    </div>
+                </div>
+                <div class="card">
+                    <img src="cena-whitted-objetivo.png" class="card-img-top">
+                    <div class="card-body">
+                        <h5 class="card-title">Objetivo <small class="diff-pixels"></small></h5>
+                    </div>
+                </div>
+            </div>
+            <div class="card-deck col-xl">
+                <div class="card">
+                    <img src="cena-cornell-box.png" class="card-img-top">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <code>cena-cornell-box.txt</code>
+                            <svg data-toggle="tooltip" title="Apenas esferas, materiais reflexivos e refratários (há sombras)" class="tooltip-icon" viewBox="0 0 14 16" version="1.1" width="16"
+                                aria-hidden="true">
+                                <path fill-rule="evenodd"
+                                    d="M6.3 5.69a.942.942 0 01-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 01-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z">
+                                </path>
+                            </svg>
+                        </h5>
+                    </div>
+                </div>
+                <div class="card">
+                    <img src="cena-cornell-box-objetivo.png" class="card-img-top">
+                    <div class="card-body">
+                        <h5 class="card-title">Objetivo <small class="diff-pixels"></small></h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <aside style="position: fixed; right: 1rem; bottom: 1rem;">
+        <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <span class="rounded mr-2 toast-icon"></span>
+                <strong class="mr-auto toast-title"></strong>
+                <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="toast-body">
+            </div>
+        </div>
+    </aside>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+    <script type="module">
+        import hjson from 'https://cdn.jsdelivr.net/npm/hjson@3.2.2/+esm'
+        import pixelmatch from 'https://cdn.jsdelivr.net/npm/pixelmatch@7.2.0/+esm'
+
+        function mostraErro(mensagem) {
+            const $toast = $('.toast')
+            $toast.find('.toast-icon').html('⚠️');
+            $toast.find('.toast-title').html('Erro');
+            $toast.find('.toast-body').html(mensagem);
+            $toast.toast('show');
+        }
+
+        function erroNoJson(erro) {
+            mostraErro('Houve um erro ao carregar o arquivo <code>autores.json</code>: <pre style="white-space: pre-wrap">' + erro + '</pre>');
+        }
+        
+        function erroDesconhecido(erro) {
+            mostraErro('Houve um erro desconhecido: <pre style="white-space: pre-wrap">' + erro + '</pre>');
+        }
+        
+        function erroDeCanvas(erro) {
+            mostraErro(`Houve um erro ao mostrar a imagem "${erro.imgSrc}": <pre style="white-space: pre-wrap">${erro}</pre>`);
+        }
+
+        function imagemParaCanvas($el) {
+            const canvasEl = document.createElement('canvas');
+            canvasEl.classList.add('card-img-top');
+            canvasEl.width = $el.width();
+            canvasEl.height = $el.height();
+            const ctx = canvasEl.getContext('2d');
+            try {
+                ctx.drawImage($el[0], 0, 0, $el.width(), $el.height());
+                $el.replaceWith(canvasEl);
+            } catch (erro) {
+                const src = $el[0].src;
+                erro.imgSrc = src.substr(src.lastIndexOf('/') + 1)
+                throw erro;
+            }
+
+            return { canvasEl, ctx };
+        }
+
+        function montarPagina(resposta) {
+            $('#alunos').html(resposta.autores.join(' <span style="color: #333">e</span> '));
+            $('#linguagem').html(resposta.linguagem);
+            $('#esfera').prop('checked', resposta.implementacoes.colisoes.esfera);
+            $('#plano').prop('checked', resposta.implementacoes.colisoes.plano);
+            $('#circulo').prop('checked', resposta.implementacoes.colisoes.circulo);
+            $('#triangulo').prop('checked', resposta.implementacoes.colisoes.triangulo);
+            $('#cilindro').prop('checked', resposta.implementacoes.colisoes.cilindro);
+            $('#phong').prop('checked', resposta.implementacoes.sombreamento.phong);
+            $('#reflexao').prop('checked', resposta.implementacoes.sombreamento.reflexao);
+            $('#refracao').prop('checked', resposta.implementacoes.sombreamento.refracao);
+            $('#distribuido').prop('checked', resposta.implementacoes.sombreamento.distribuido);
+
+            const erros = [];
+            $('.card-deck').each((i, el) => {
+                try {
+                    const $imagemDoAluno = $(el).find('.card').first().find('img');
+                    const $imagemDoObjetivo = $(el).find('.card').last().find('img');
+                    const largura = Math.floor($imagemDoObjetivo.width());
+                    const altura = Math.floor($imagemDoObjetivo.height());
+                    const canvasDoAluno = imagemParaCanvas($imagemDoAluno);
+                    const canvasDoObjetivo = imagemParaCanvas($imagemDoObjetivo);
+                    const canvasDoDiff = document.createElement('canvas');
+                    canvasDoDiff.width = largura;
+                    canvasDoDiff.height = altura;
+                    canvasDoDiff.classList.add('card-img-top');
+                    canvasDoDiff.classList.add('diff');
+                    const diffCtx = canvasDoDiff.getContext('2d');
+                    const diff = diffCtx.createImageData(largura, altura);
+        
+                    const pixelsDiferentes = pixelmatch(
+                        canvasDoAluno.ctx.getImageData(0, 0, largura, altura).data,
+                        canvasDoObjetivo.ctx.getImageData(0, 0, largura, altura).data,
+                        diff.data,
+                        largura, altura,
+                        { 
+                            threshold: 0.15
+                        }
+                    );
+        
+                    diffCtx.putImageData(diff, 0, 0);
+                    $(el).find('.card').last().prepend(canvasDoDiff);
+                    const porcentagemDiferenca = (100 * pixelsDiferentes / (largura * altura));
+        
+                    $(el).find('.card').last().find('.diff-pixels')
+                        .addClass('float-right')
+                        .html(`<span>${porcentagemDiferenca.toFixed(2)}%</span> pixels diferentes`)
+                        .find('span')
+                        .addClass(porcentagemDiferenca < 0.05 ? 'text-primary' : 'text-danger')
+                } catch (erro) {
+                    erros.push(erro);
+                }
+            });
+
+            if (erros.length > 0) {
+                erros.forEach(erro => erro.name === 'InvalidStateError' ? erroDeCanvas(erro) : erroDesconhecido(erro));
+            }
+
+            
+            return Promise.resolve();
+        }
+        
+        // inicia toasts e tootlips
+        $('.toast').toast({ autohide: false, delay: 6000 });
+        $('[data-toggle="tooltip"]').tooltip()
+
+        fetch('./autores.hjson')
+            .then(r => r.text())
+            .then(r => hjson.parse(r), erroNoJson)
+            .then(montarPagina, erroDesconhecido)
+                .catch(erroDesconhecido)
+    </script>
+</body>
+</html>

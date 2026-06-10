@@ -1,0 +1,31 @@
+{
+    # coloque os nomes dos autores
+    "autores": [
+        "Adamastor Carmago",    // se for apenas 1, remova a vírgula e o segundo nome
+        "Custódio Fonseca"
+    ],
+
+    # linguagem escolhida: escreva o nome da pasta (eg, java, cpp ou js)
+    "linguagem": "js",
+
+
+    "implementacoes": {
+        # coloque true ou false indicando que tipos de colisão foram implementados
+        "colisoes": {
+            "esfera": true,
+            "plano": false,
+            "circulo": false,
+            "triangulo": false,
+            "cilindro": false,
+            "obj": false
+        },
+
+        # coloque true ou false indicando o que foi feito na segunda parte
+        "sombreamento": {
+            "phong": true,              // exercícios obrigatórios
+            "reflexao": false,          // recursivo: objetos reflexivos
+            "refracao": false,          // recursivo: objetos transparentes
+            "distribuido": false        // distribuído com jittering
+        }
+    }
+}

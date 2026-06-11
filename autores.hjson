@@ -12,10 +12,10 @@
         # coloque true ou false indicando que tipos de colisão foram implementados
         "colisoes": {
             "esfera": true,
-            "plano": false,
-            "circulo": false,
-            "triangulo": false,
-            "cilindro": false,
+            "plano": true,
+            "circulo": true,
+            "triangulo": true,
+            "cilindro": true,
             "obj": false
         },
 

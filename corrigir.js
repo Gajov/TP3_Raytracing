@@ -9,6 +9,7 @@ import ProgressBar from 'progress';
 import chalk from 'chalk';
 import portfinder from 'portfinder';
 import Hjson from 'hjson';
+import os from 'node:os';
 
 // linguagens suportadas
 class Linguagem {
@@ -18,6 +19,12 @@ class Linguagem {
         this.comandoExecutar = comandoExecutar;
     }
 }
+
+const gradleCmd = os.platform() === 'win32'
+    ? 'cd java && gradlew.bat -b projeto.gradle jar'
+    : 'cd java && ./gradlew -b projeto.gradle jar';
+
+
 const linguagens = {
     cpp: new Linguagem(
         'cpp',
@@ -26,7 +33,7 @@ const linguagens = {
     ),
     java: new Linguagem(
         'java',
-        'cd java && ./gradlew -b projeto.gradle jar && chmod +x dist/raytracer.jar',
+        gradleCmd,
         c => `java -jar java/dist/raytracer.jar cenas_txt/cena-${c}.txt`
     ),
     js: new Linguagem(

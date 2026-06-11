@@ -24,6 +24,17 @@ public class Circle extends Object {
     public RayResponse intersectsWith(Ray ray) {
         RayResponse response = new RayResponse();
         
+        response = plane.intersectsWith(ray);
+        if (!response.intersected) {
+            return response;
+        }
+
+        Vector3 distance = response.P.diff(this.center);
+
+        if (distance.norm() > this.radius) {
+            return new RayResponse();
+        }
+
         return response;
     }
 

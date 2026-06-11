@@ -2,8 +2,8 @@ package raytracer.scene.objects;
 
 import raytracer.Ray;
 import raytracer.RayResponse;
-import raytracer.math.Constants;
 import raytracer.math.Vector3;
+import raytracer.math.Constants;
 
 /**
  * Uma esfera, que tem uma posição do seu centro e um raio.
@@ -59,33 +59,33 @@ public class Sphere extends Object {
 
         Vector3 p = this.center.diff(P0);
 
-        double a = 1;
+        double a = u.dot(u);
         double b = -2 * u.dot(p);
         double c = p.dot(p) - this.radius * this.radius;
 
         double delta = b * b - 4 * a * c;
 
-        if (delta < 0) {
+        if (delta < Constants.TINY) {
             return response;
         }
 
         double t1 = (-b - Math.sqrt(delta)) / (2 * a);
         double t2 = (-b + Math.sqrt(delta)) / (2 * a);
 
-        if (t1 < 0 && t2 < 0) {
+        if (t1 < Constants.TINY && t2 < Constants.TINY) {
             return response;
         }
 
         double t = 0;
 
-        if (t1 > 0) {
+        if (t1 > Constants.TINY) {
             t = t1;
-        } else if (t1 < 0 && t2 > 0) {
+        } else if (t1 < Constants.TINY && t2 > Constants.TINY) {
             t = t2;
         }
 
         Vector3 P = P0.add(u.mult(t));
-        Vector3 n = this.center.diff(P);
+        Vector3 n = P.diff(this.center).normalized();
 
         response.intersected = true;
         response.t = t;

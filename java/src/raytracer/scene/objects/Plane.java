@@ -3,6 +3,7 @@ package raytracer.scene.objects;
 import raytracer.Ray;
 import raytracer.RayResponse;
 import raytracer.math.Vector3;
+import raytracer.math.Constants;
 
 /**
  * Um plano dado por um ponto e um vetor normal.
@@ -21,7 +22,32 @@ public class Plane extends Object {
     @Override
     public RayResponse intersectsWith(Ray ray) {
         RayResponse response = new RayResponse();
-        
+        double denom = normal.dot(ray.u);
+
+        if (Math.abs(denom) < Constants.TINY) {
+            return response;
+        }
+
+        double t = normal.dot(samplePoint.diff(ray.P0)) / denom;
+
+        // interseção atrás da origem do raio
+        if (t < Constants.TINY) {
+            return response;
+        }
+
+        Vector3 P = ray.P0.add(ray.u.mult(t));
+
+        Vector3 n = normal;
+
+        if (n.dot(ray.u) > 0) {
+            n = n.mult(-1);
+        }
+
+        response.intersected = true;
+        response.t = t;
+        response.P = P;
+        response.n = n;
+
         return response;
     }
 

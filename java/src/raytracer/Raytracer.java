@@ -1,5 +1,6 @@
 package raytracer;
 
+import raytracer.math.Constants;
 import raytracer.math.Vector3;
 import raytracer.scene.Camera;
 import raytracer.scene.Light;
@@ -83,7 +84,7 @@ public class Raytracer {
         // que deve ser devidamente calculada e retornada ao final
         // deste método (castRay). É a variável Cor(P) da equação de Phong.
         // (seu lado esquerdo)
-        Vector3 CorP = C;
+        Vector3 CorP = C.mult(material.p_a); // componente ambiente (inicialmente, apenas ela)
 
         // ------------------------------------------------------------------
         // A segunda parte do TP3 (sombreamento) deve ser feita neste arquivo.
@@ -125,12 +126,10 @@ public class Raytracer {
                 // será usada tanto para a componente difusa quanto especular
                 // (~8 linhas)
 
-                
-                
-                
-                
-                
-                
+                Vector3 l = light.P_luz.diff(intersection.P).normalized();
+                Vector3 corDaLuzAtenuada = light.L_i.mult(1.0 / (light.a + light.b * l.norm() + light.c * l.norm() * l.norm()));
+                Vector3 difusa = (corDaLuzAtenuada.mult(material.p_d)).cwMult(C).mult(Math.max(0, intersection.n.dot(l)));
+                CorP = CorP.add(difusa);
                 
                 
                 // ---
@@ -145,22 +144,33 @@ public class Raytracer {
                 // r.v mesmo.
                 // (~5 linhas)
                 
+                Vector3 r = intersection.n.mult(2 * intersection.n.dot(l)).diff(l).normalized();
+                Vector3 v = scene.camera.eye.diff(intersection.P).normalized();
+                double spec = Math.pow(Math.max(0, r.dot(v)),material.alpha);
+                Vector3 especular = corDaLuzAtenuada.mult(material.p_s * spec);
 
-
-
-
-
+                CorP = CorP.add(especular);
             }
         }
 
         // [EXTRA - Semana 2, exercício 5]: se o material for reflexivo,
         // lançar raio de reflexão chamando castRay recursivamente (~15 linhas)
 
+        if (material.p_r > 0) {
+            Vector3 n = intersection.n;
+
+            Vector3 reflectedDirection = ray.u.diff(n.mult(2 * ray.u.dot(n))).normalized();
+
+            Ray reflectedRay = new Ray(intersection.P.add(n.mult(Constants.TINY)),reflectedDirection);
+
+            Vector3 reflectedColor = castRay(scene, reflectedRay);
+
+            CorP = CorP.mult(1.0 - material.p_r).add(reflectedColor.mult(material.p_r));
+        }
 
         
         // [EXTRA - Semana 2, exercício 6]: se o material for transparente,
         // lançar raio de refração chamando castRay recursivamente (~25 linhas)
-
         
         
         // trunca a cor: faz r, g e b ficarem entre 0 e 1, caso tenha excedido

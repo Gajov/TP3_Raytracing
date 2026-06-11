@@ -27,7 +27,7 @@ const linguagens = {
     java: new Linguagem(
         'java',
         'cd java && ./gradlew -b projeto.gradle jar && chmod +x dist/raytracer.jar',
-        c => `java -jar java/dist/raytracer.jar cena-${c}.txt`
+        c => `java -jar java/dist/raytracer.jar cenas_txt/cena-${c}.txt`
     ),
     js: new Linguagem(
         'js',

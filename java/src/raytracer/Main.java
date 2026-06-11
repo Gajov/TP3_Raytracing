@@ -63,7 +63,7 @@ public class Main {
         System.out.println("Salvando arquivos: " + outputName + ".png");
 
         try {
-            Output.writeImagePng(outputName + ".png", WIDTH, HEIGHT, bufferI);
+            Output.writeImagePng("cenas_geradas/"+outputName + ".png", WIDTH, HEIGHT, bufferI);
             //Output.writeImagePpm(outputName + ".ppm", WIDTH, HEIGHT, bufferB);
             //Output.writeImagePpmRaw(args[1]+"-java-raw.ppm", WIDTH, HEIGHT, bufferB);
         } catch (IOException ex) {

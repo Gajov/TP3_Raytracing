@@ -55,7 +55,7 @@ public class Sphere extends Object {
         // (normal) do objeto nesse ponto.
         //
         Vector3 P0 = ray.P0;
-        Vector3 u = ray.u;
+        Vector3 u  = ray.u;
 
         Vector3 p = this.center.diff(P0);
 
@@ -63,33 +63,34 @@ public class Sphere extends Object {
         double b = -2 * u.dot(p);
         double c = p.dot(p) - this.radius * this.radius;
 
-        double delta = b*b - 4 * a * c;
-        double t = 0;
-        Vector3 P, n;
+        double delta = b * b - 4 * a * c;
 
-        if (delta >= 0){
-            double t1 = (-b - Math.sqrt(delta)) / (2*a); 
-            double t2 = (-b - Math.sqrt(delta)) / (2*a);
-            
-            if (t1<0 && t2<0){
-                return response;
-            } else {
-                response.intersected = true;
-                if(t1>0){
-                    t = t1;
-                } else if (t1<0 && t2>0){
-                    t = t2; 
-                }
-                P = P0.add(u.mult(t));
-                n = this.center.diff(P);
-                
-                response.t = t;
-                response.P = P;
-                response.n = n;
-            } 
-        } else {
+        if (delta < 0) {
             return response;
         }
+
+        double t1 = (-b - Math.sqrt(delta)) / (2 * a);
+        double t2 = (-b + Math.sqrt(delta)) / (2 * a);
+
+        if (t1 < 0 && t2 < 0) {
+            return response;
+        }
+
+        double t = 0;
+
+        if (t1 > 0) {
+            t = t1;
+        } else if (t1 < 0 && t2 > 0) {
+            t = t2;
+        }
+
+        Vector3 P = P0.add(u.mult(t));
+        Vector3 n = this.center.diff(P);
+
+        response.intersected = true;
+        response.t = t;
+        response.P = P;
+        response.n = n;
 
         return response;
     }

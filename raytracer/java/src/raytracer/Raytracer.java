@@ -70,7 +70,7 @@ public class Raytracer {
         // Verifica se um objeto foi atingido
         if (closestObjectHit == null) {
             // nada foi atingido. Retorna uma cor padrão (de fundo)
-            return new Vector3(0, 0, 1);
+            return new Vector3(0, 0, 0);
         }
 
         // Algum objeto (closestObjectHit) foi atingido! Vamos determinar

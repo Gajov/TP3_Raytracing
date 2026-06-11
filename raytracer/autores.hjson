@@ -1,12 +1,11 @@
 {
     # coloque os nomes dos autores
     "autores": [
-        "Adamastor Carmago",    // se for apenas 1, remova a vírgula e o segundo nome
-        "Custódio Fonseca"
+        "Gabriel Jovenal de Paula"    // se for apenas 1, remova a vírgula e o segundo nome
     ],
 
     # linguagem escolhida: escreva o nome da pasta (eg, java, cpp ou js)
-    "linguagem": "js",
+    "linguagem": "java",
 
 
     "implementacoes": {

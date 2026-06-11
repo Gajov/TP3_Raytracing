@@ -54,6 +54,43 @@ public class Sphere extends Object {
         // o valor de t, o P (ponto) onde o raio atingiu o objeto e o vetor n
         // (normal) do objeto nesse ponto.
         //
+        Vector3 P0 = ray.P0;
+        Vector3 u = ray.u;
+
+        Vector3 p = this.center.diff(P0);
+
+        double a = 1;
+        double b = -2 * u.dot(p);
+        double c = p.dot(p) - this.radius * this.radius;
+
+        double delta = b*b - 4 * a * c;
+        double t = 0;
+        Vector3 P, n;
+
+        if (delta >= 0){
+            double t1 = (-b - Math.sqrt(delta)) / (2*a); 
+            double t2 = (-b - Math.sqrt(delta)) / (2*a);
+            
+            if (t1<0 && t2<0){
+                return response;
+            } else {
+                response.intersected = true;
+                if(t1>0){
+                    t = t1;
+                } else if (t1<0 && t2>0){
+                    t = t2; 
+                }
+                P = P0.add(u.mult(t));
+                n = this.center.diff(P);
+                
+                response.t = t;
+                response.P = P;
+                response.n = n;
+            } 
+        } else {
+            return response;
+        }
+
         return response;
     }
 

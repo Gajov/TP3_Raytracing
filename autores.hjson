@@ -23,8 +23,8 @@
         "sombreamento": {
             "phong": true,              // exercícios obrigatórios
             "reflexao": true,          // recursivo: objetos reflexivos
-            "refracao": false,          // recursivo: objetos transparentes
-            "distribuido": false        // distribuído com jittering
+            "refracao": true,          // recursivo: objetos transparentes
+            "distribuido": true        // distribuído com jittering
         }
     }
 }

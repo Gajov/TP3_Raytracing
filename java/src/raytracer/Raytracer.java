@@ -176,7 +176,37 @@ public class Raytracer {
         
         // [EXTRA - Semana 2, exercício 6]: se o material for transparente,
         // lançar raio de refração chamando castRay recursivamente (~25 linhas)
-        
+        if (material.p_t > 0) {
+            Vector3 N = intersection.n;
+
+            double n1 = 1.0;
+            double n2 = material.p_t;
+
+            double cosi = -N.dot(ray.u);
+
+            if (cosi < 0) {
+                cosi = -cosi;
+                N = N.mult(-1);
+
+                double temp = n1;
+                n1 = n2;
+                n2 = temp;
+            }
+
+            double eta = n1 / n2;
+
+            double k = 1.0 - eta * eta * (1.0 - cosi * cosi);
+
+            if (k >= 0) {
+                Vector3 refractedDirection = ray.u.mult(eta).add(N.mult(eta * cosi - Math.sqrt(k))).normalized();
+
+                Ray refractedRay = new Ray(intersection.P.diff(N.mult(Constants.TINY)),refractedDirection);
+
+                Vector3 refractedColor = castRay(scene, refractedRay);
+
+                CorP = CorP.add(refractedColor.mult(material.p_t));
+            }
+        }
         
         // trunca a cor: faz r, g e b ficarem entre 0 e 1, caso tenha excedido
         CorP.truncate();
@@ -234,9 +264,6 @@ public class Raytracer {
             }
         }
          
-        
-       
-        // Está sempre retornando true, ou seja, sombras nunca são geradas...
         return true;
     }
 
@@ -261,15 +288,24 @@ public class Raytracer {
                 // uma posição diferente dentro do pixel
                 // Ao final, a cor do pixel é a média das cores de todos raios
                 // lançados através dele
+                
+                Vector3 color = new Vector3(0, 0, 0);
+                
+                int RMS = 4; // Ray Matrix size
 
-                // cria um raio primário
-                Ray ray = generateInitialRay(scene.camera, i, j, height, width);
+                for(int y = 0; y < RMS; y++) {
+                    for(int x = 0; x < RMS; x++) {
+                        double dx = (x + Math.random()) / RMS;
+                        double dy = (y + Math.random()) / RMS;
 
-                // lança o raio e recebe a cor
-                Vector3 color = castRay(scene, ray);
+                        Ray ray = generateInitialRay(scene.camera,i + dy,j + dx,height,width);
 
+                        color = color.add(castRay(scene, ray));
+                    }
+                }
+            
                 // salva a cor na matriz de cores
-                pixels[i][j] = color;
+                pixels[i][j] = color.mult(1.0 / (RMS * RMS)); // média da cor dos raios lançados através do pixel
             }
         }
 

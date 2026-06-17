@@ -126,8 +126,12 @@ public class Raytracer {
                 // será usada tanto para a componente difusa quanto especular
                 // (~8 linhas)
 
-                Vector3 l = light.P_luz.diff(intersection.P).normalized();
-                Vector3 corDaLuzAtenuada = light.L_i.mult(1.0 / (light.a + light.b * l.norm() + light.c * l.norm() * l.norm()));
+                Vector3 lightVector = light.P_luz.diff(intersection.P);
+                double d = lightVector.norm();
+
+                Vector3 l = lightVector.normalized();
+
+                Vector3 corDaLuzAtenuada = light.L_i.mult(1.0 / (light.a + light.b * d + light.c * d * d));
                 Vector3 difusa = (corDaLuzAtenuada.mult(material.p_d)).cwMult(C).mult(Math.max(0, intersection.n.dot(l)));
                 CorP = CorP.add(difusa);
                 
@@ -165,7 +169,8 @@ public class Raytracer {
 
             Vector3 reflectedColor = castRay(scene, reflectedRay);
 
-            CorP = CorP.mult(1.0 - material.p_r).add(reflectedColor.mult(material.p_r));
+            //CorP = CorP.mult(1.0 - material.p_r).add(reflectedColor.mult(material.p_r));
+            CorP = CorP.add(reflectedColor.mult(material.p_r));
         }
 
         
@@ -210,14 +215,27 @@ public class Raytracer {
         // com o próprio objeto seja true, indicando que o próprio objeto está
         // obstruindo a luz de chegar nele, o que não deve acontecer.
         // (~10 linhas)
+        
+        Vector3 directionToLight = light.P_luz.diff(intersection.P);
+        double distanceToLight = directionToLight.norm();
+        
+        Ray shadowRay = new Ray(intersection.P.add(intersection.n.mult(Constants.TINY)), directionToLight.normalized());
 
+        for (Object obj : scene.objects) {
+
+            if (obj == objectHit) continue;
+
+            RayResponse response = obj.intersectsWith(shadowRay);
+
+            if (response.intersected) {
+                if (response.t > Constants.TINY && response.t < distanceToLight) {
+                    return false;
+                }
+            }
+        }
+         
         
-        
-        
-        
-        
-        
-        
+       
         // Está sempre retornando true, ou seja, sombras nunca são geradas...
         return true;
     }

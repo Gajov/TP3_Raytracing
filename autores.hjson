@@ -22,7 +22,7 @@
         # coloque true ou false indicando o que foi feito na segunda parte
         "sombreamento": {
             "phong": true,              // exercícios obrigatórios
-            "reflexao": false,          // recursivo: objetos reflexivos
+            "reflexao": true,          // recursivo: objetos reflexivos
             "refracao": false,          // recursivo: objetos transparentes
             "distribuido": false        // distribuído com jittering
         }
